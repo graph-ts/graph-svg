@@ -1,6 +1,6 @@
 {
   "name": "@graph-ts/graph-svg",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A React component for rendering graphs using SVG",
   "main": "dist/graph-svg.js",
   "module": "dist/graph-svg.esm.js",
