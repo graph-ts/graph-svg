@@ -1,0 +1,28 @@
+.button-bar {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #999;
+}
+
+.button-bar .button {
+    padding: 0.1em 0.4em;
+    border-left: 1px solid #999;
+    font-size: 0.9rem;
+}
+
+.button-bar .button:first-of-type {
+    border-left: none;
+}
+
+.button-bar .button:last-of-type {
+    border-right: 1px solid #999;
+}
+
+.button-bar .separator {
+    width: 0;
+    border-right: 4px solid #999;
+}
+
+.button-bar .separator + .button {
+    border-left: none;
+}

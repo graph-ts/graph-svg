@@ -1,0 +1,11 @@
+# Build directories
+dist
+
+# Node
+node_modules
+
+# IDE
+.idea
+
+# Mac
+.DS_Store
