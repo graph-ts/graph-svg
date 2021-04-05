@@ -64,7 +64,6 @@ export type PathDef = CurveDef & {
 export type PathDefResolved = CurveDef & {
     points: Vector2[]
 }
-export interface BoundPathDef { pathDef: PathDefResolved }
 
 
 // Labels

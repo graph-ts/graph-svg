@@ -62,8 +62,6 @@
   },
   "peerDependencies": {
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "@graph-ts/graph-lib": ">=1.0.0",
-    "@graph-ts/vector2": ">=1.3.0"
+    "react-dom": ">=16.8.0"
   }
 }

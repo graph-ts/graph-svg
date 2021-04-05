@@ -13,7 +13,7 @@ import {
     curveStepBefore,
     Line,
     line
-} from 'd3';
+} from 'd3-shape';
 import { assign, defaultTo, omit } from 'lodash-es';
 import { CSSProperties } from 'react';
 import { Matrix } from 'transformation-matrix';

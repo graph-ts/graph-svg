@@ -2,8 +2,6 @@ const path = require('path');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const isDev = process.env.NODE_ENV === 'development';
-
 module.exports = (_, argv) => {
 
     const mode = argv.mode;
