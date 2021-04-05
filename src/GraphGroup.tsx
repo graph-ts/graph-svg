@@ -191,7 +191,7 @@ class GraphGroup extends Component<GraphGroupProps> {
         const edgeSelected = prev.defaultEdgeStyleSelected !== props.defaultEdgeStyleSelected;
         if (node || nodeHovered || nodeSelected)
             this.store.dispatch(nodeStyleDefaultsChanged({
-                style: props.defaultNodeStyleSelected,
+                style: props.defaultNodeStyle,
                 hovered: props.defaultNodeStyleHovered,
                 selected: props.defaultNodeStyleSelected
             }));
