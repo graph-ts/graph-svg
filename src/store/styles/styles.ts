@@ -47,6 +47,13 @@ export interface StyleDefUpdate {
     selectionState: SelectionState
 }
 
+export interface DefaultStyleDefUpdate {
+    style?: CSSProperties
+    hovered?: CSSProperties
+    selected?: CSSProperties
+    selectionState: SelectionState
+}
+
 export const createStylesState = (
     graph?: Graph,
     nodeStyles?: Dict<CSSProperties>,

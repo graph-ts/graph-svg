@@ -1,10 +1,14 @@
 import { Vector2 } from '@graph-ts/vector2';
-import { CSSProperties, FC } from 'react';
+import { CSSProperties, FC, useState } from 'react';
 import { newGraph } from '@graph-ts/graph-lib';
 import { ShapeDef } from '../src/components/types';
 import GraphSVGDiv from '../src/GraphSVGDiv';
+import { Button, ButtonBar } from './ui/ButtonBar';
+import { randomNodeStyle } from './utilities/styles';
 
 export const Example4: FC = () => {
+
+    const [defaultStyle, setDefaultStyle] = useState<CSSProperties>(randomNodeStyle());
 
     const g = newGraph<Vector2, {}>([
         { id: 'a', x: 100 * Math.cos(2 * Math.PI / 3), y: 100 * Math.sin(2 * Math.PI / 3) },
@@ -16,19 +20,23 @@ export const Example4: FC = () => {
         { id: 'ca', source: 'c', target: 'a' }
     ]);
 
+    const randomDefaultStyle = () => {
+        setDefaultStyle(randomNodeStyle());
+    };
+
     const defaultShape: ShapeDef = {
         shape: 'circle',
         radius: 10
     };
 
-    const defaultStyle: CSSProperties = {
-        stroke: 'none',
-        fill: '#333'
-    }
-
-    return <GraphSVGDiv
+    return <>
+        <ButtonBar>
+            <Button onClick={randomDefaultStyle}>Random Default Style</Button>
+        </ButtonBar>
+        <GraphSVGDiv
         graph={g}
         defaultShape={defaultShape}
         defaultNodeStyle={defaultStyle}/>
+        </>
 
 }

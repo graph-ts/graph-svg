@@ -89,7 +89,7 @@ class GraphGroup extends Component<GraphGroupProps> {
         this._updateCallbacks(prev, props);
         this._updateDefaultPath(prev, props);
         this._updateDefaultShape(prev, props);
-        this._updateDefaultStyles(prev, props);
+        this._updateDefaultStyles(prev, props, state);
         this._updateEdgeStyles(prev, props, state);
         this._updateInteractionDisabled(prev, props);
         this._updateNodeStyles(prev, props, state);
@@ -182,7 +182,7 @@ class GraphGroup extends Component<GraphGroupProps> {
             this.store.dispatch(defaultShapeChanged(props.defaultShape));
     }
 
-    private _updateDefaultStyles = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+    private _updateDefaultStyles = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps, state: RootState) => {
         const node = prev.defaultNodeStyle !== props.defaultNodeStyle;
         const nodeHovered = prev.defaultNodeStyleHovered !== props.defaultNodeStyleHovered;
         const nodeSelected = prev.defaultNodeStyleSelected !== props.defaultNodeStyleSelected;
@@ -193,13 +193,15 @@ class GraphGroup extends Component<GraphGroupProps> {
             this.store.dispatch(nodeStyleDefaultsChanged({
                 style: props.defaultNodeStyle,
                 hovered: props.defaultNodeStyleHovered,
-                selected: props.defaultNodeStyleSelected
+                selected: props.defaultNodeStyleSelected,
+                selectionState: state.selection
             }));
         if (edge || edgeHovered || edgeSelected)
             this.store.dispatch(edgeStyleDefaultsChanged({
                 style: props.defaultEdgeStyle,
                 hovered: props.defaultEdgeStyleHovered,
-                selected: props.defaultEdgeStyleSelected
+                selected: props.defaultEdgeStyleSelected,
+                selectionState: state.selection
             }));
     }
 

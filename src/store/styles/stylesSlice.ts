@@ -3,7 +3,6 @@ import { Vector2 } from '@graph-ts/vector2';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { defaultTo, keys } from 'lodash-es';
 import * as defaults from '../../components/defaults';
-import { DynamicStyles } from '../../components/types';
 import { graphChanged } from '../graph/graphSlice';
 import { SelectionUpdate } from '../selection/selection';
 import {
@@ -13,7 +12,14 @@ import {
     getSelectedNodeIDs
 } from '../selection/selectionSelectors';
 import { selectionChanged } from '../selection/selectionSlice';
-import { createStylesState, resolveEdgeStyle, resolveNodeStyle, StyleDefUpdate, StylesState } from './styles';
+import {
+    createStylesState,
+    DefaultStyleDefUpdate,
+    resolveEdgeStyle,
+    resolveNodeStyle,
+    StyleDefUpdate,
+    StylesState
+} from './styles';
 
 const initialState: StylesState = createStylesState();
 
@@ -21,19 +27,30 @@ const stylesSlice = createSlice({
     name: 'styles',
     initialState,
     reducers: {
-        edgeStyleDefaultsChanged (state, action: PayloadAction<Partial<DynamicStyles>>) {
-            const styles = action.payload;
-            state.edgeDefault.style = defaultTo(styles.style, defaults.EDGE_STYLE);
-            state.edgeDefault.hovered = defaultTo(styles.hovered, defaults.EDGE_HOVER_STYLE);
-            state.edgeDefault.selected = defaultTo(styles.selected, defaults.EDGE_SELECTED_STYLE);
+        edgeStyleDefaultsChanged (state, action: PayloadAction<DefaultStyleDefUpdate>) {
+
+            const { style, hovered, selected, selectionState } = action.payload;
+            const edgeIDs = keys(state.edgeStyles);
+            const hoveredEdgeID = getHoveredEdgeID(selectionState);
+            const selectedEdgeIDs = new Set(getSelectedEdgeIDs(selectionState));
+
+            state.edgeDefault.style = defaultTo(style, defaults.EDGE_STYLE);
+            state.edgeDefault.hovered = defaultTo(hovered, defaults.EDGE_HOVER_STYLE);
+            state.edgeDefault.selected = defaultTo(selected, defaults.EDGE_SELECTED_STYLE);
+            edgeIDs.forEach(edgeID => {
+                const selected = selectedEdgeIDs.has(edgeID);
+                const hovered = edgeID === hoveredEdgeID;
+                state.edgeStyles[edgeID] = resolveEdgeStyle(state, edgeID, hovered, selected);
+            });
+
         },
         edgeStyleDefsChanged (state, action: PayloadAction<StyleDefUpdate>) {
 
             const { style, hovered, selected, selectionState } = action.payload;
-
             const edgeIDs = keys(state.edgeStyles);
             const hoveredEdgeID = getHoveredEdgeID(selectionState);
             const selectedEdgeIDs = new Set(getSelectedEdgeIDs(selectionState));
+
             state.edgeDefs.style = style;
             state.edgeDefs.hovered = hovered;
             state.edgeDefs.selected = selected;
@@ -44,19 +61,30 @@ const stylesSlice = createSlice({
             });
 
         },
-        nodeStyleDefaultsChanged (state, action: PayloadAction<Partial<DynamicStyles>>) {
-            const styles = action.payload;
-            state.nodeDefault.style = defaultTo(styles.style, defaults.NODE_STYLE);
-            state.nodeDefault.hovered = defaultTo(styles.hovered, defaults.NODE_HOVER_STYLE);
-            state.nodeDefault.selected = defaultTo(styles.selected, defaults.NODE_SELECTED_STYLE);
+        nodeStyleDefaultsChanged (state, action: PayloadAction<DefaultStyleDefUpdate>) {
+
+            const { style, hovered, selected, selectionState } = action.payload;
+            const nodeIDs = keys(state.nodeStyles);
+            const hoveredNodeID = getHoveredNodeID(selectionState);
+            const selectedNodeIDs = new Set(getSelectedNodeIDs(selectionState));
+
+            state.nodeDefault.style = defaultTo(style, defaults.NODE_STYLE);
+            state.nodeDefault.hovered = defaultTo(hovered, defaults.NODE_HOVER_STYLE);
+            state.nodeDefault.selected = defaultTo(selected, defaults.NODE_SELECTED_STYLE);
+            nodeIDs.forEach(nodeID => {
+                const selected = selectedNodeIDs.has(nodeID);
+                const hovered = nodeID === hoveredNodeID;
+                state.nodeStyles[nodeID] = resolveNodeStyle(state, nodeID, hovered, selected);
+            });
+
         },
         nodeStyleDefsChanged (state, action: PayloadAction<StyleDefUpdate>) {
 
             const { style, hovered, selected, selectionState } = action.payload;
-
             const nodeIDs = keys(state.nodeStyles);
             const hoveredNodeID = getHoveredNodeID(selectionState);
             const selectedNodeIDs = new Set(getSelectedNodeIDs(selectionState));
+
             state.nodeDefs.style = style;
             state.nodeDefs.hovered = hovered;
             state.nodeDefs.selected = selected;
