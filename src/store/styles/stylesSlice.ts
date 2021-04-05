@@ -1,7 +1,9 @@
 import { getEdges, getNodes, Graph } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { keys } from 'lodash-es';
+import { defaultTo, keys } from 'lodash-es';
+import * as defaults from '../../components/defaults';
+import { DynamicStyles } from '../../components/types';
 import { graphChanged } from '../graph/graphSlice';
 import { SelectionUpdate } from '../selection/selection';
 import {
@@ -19,6 +21,12 @@ const stylesSlice = createSlice({
     name: 'styles',
     initialState,
     reducers: {
+        edgeStyleDefaultsChanged (state, action: PayloadAction<Partial<DynamicStyles>>) {
+            const styles = action.payload;
+            state.edgeDefault.style = defaultTo(styles.style, defaults.EDGE_STYLE);
+            state.edgeDefault.hovered = defaultTo(styles.hovered, defaults.EDGE_HOVER_STYLE);
+            state.edgeDefault.selected = defaultTo(styles.selected, defaults.EDGE_SELECTED_STYLE);
+        },
         edgeStyleDefsChanged (state, action: PayloadAction<StyleDefUpdate>) {
 
             const { style, hovered, selected, selectionState } = action.payload;
@@ -35,6 +43,12 @@ const stylesSlice = createSlice({
                 state.edgeStyles[edgeID] = resolveEdgeStyle(state, edgeID, hovered, selected);
             });
 
+        },
+        nodeStyleDefaultsChanged (state, action: PayloadAction<Partial<DynamicStyles>>) {
+            const styles = action.payload;
+            state.nodeDefault.style = defaultTo(styles.style, defaults.NODE_STYLE);
+            state.nodeDefault.hovered = defaultTo(styles.hovered, defaults.NODE_HOVER_STYLE);
+            state.nodeDefault.selected = defaultTo(styles.selected, defaults.NODE_SELECTED_STYLE);
         },
         nodeStyleDefsChanged (state, action: PayloadAction<StyleDefUpdate>) {
 
@@ -99,7 +113,9 @@ const stylesSlice = createSlice({
 });
 
 export const {
+    edgeStyleDefaultsChanged,
     edgeStyleDefsChanged,
+    nodeStyleDefaultsChanged,
     nodeStyleDefsChanged
 } = stylesSlice.actions;
 export default stylesSlice.reducer;

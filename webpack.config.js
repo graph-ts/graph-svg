@@ -12,10 +12,7 @@ module.exports = (_, argv) => {
     return {
         mode: isDev ? 'development' : 'production',
         context: __dirname,
-        entry: [
-            isDev && 'webpack-hot-middleware/client',
-            './examples/index.tsx'
-        ].filter(Boolean),
+        entry: './examples/index.tsx',
         output: {
             filename: '[name].bundle.js',
             path: path.resolve(__dirname, 'docs'),

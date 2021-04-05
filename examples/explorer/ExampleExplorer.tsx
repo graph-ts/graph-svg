@@ -4,16 +4,18 @@ import { Example1 } from '../Example1';
 import { Example2 } from '../Example2';
 import { Example3 } from '../Example3';
 import './example-explorer.scss';
+import { Example4 } from '../Example4';
 
 const ExampleExplorer: FC = props => {
 
-    const [example, setExample] = useState<number>(0);
+    const [example, setExample] = useState<number>(4);
 
     const examples: [number, ComponentType][] = [
         [0, Example0],
         [1, Example1],
         [2, Example2],
-        [3, Example3]
+        [3, Example3],
+        [4, Example4]
     ];
 
     const Example = examples[example][1];

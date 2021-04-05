@@ -16,6 +16,12 @@ export interface SelectionStatus {
 export interface GraphGroupProps {
     graph: Graph<Vector2>
     svg: SVGSVGElement
+    defaultEdgeStyle?: CSSProperties
+    defaultEdgeStyleHovered?: CSSProperties
+    defaultEdgeStyleSelected?: CSSProperties
+    defaultNodeStyle?: CSSProperties
+    defaultNodeStyleHovered?: CSSProperties
+    defaultNodeStyleSelected?: CSSProperties
     defaultPath?: PathDef
     defaultShape?: ShapeDef
     edgeLabels?: Dict<LabelDef[]>
