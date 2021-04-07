@@ -18,7 +18,9 @@ import {
 import { createGraphState } from './store/graph/graph';
 import graphReducer, { graphChanged } from './store/graph/graphSlice';
 import { createLabelsState } from './store/labels/labels';
-import labelsReducer from './store/labels/labelsSlice';
+import labelsReducer, {
+    nodeLabelsChanged
+} from './store/labels/labelsSlice';
 import { createPathsState } from './store/paths/paths';
 import pathsReducer, { defaultPathChanged } from './store/paths/pathsSlice';
 import { createSelectionState } from './store/selection/selection';
@@ -92,6 +94,7 @@ class GraphGroup extends Component<GraphGroupProps> {
         this._updateDefaultStyles(prev, props, state);
         this._updateEdgeStyles(prev, props, state);
         this._updateInteractionDisabled(prev, props);
+        this._updateNodeLabels(prev, props);
         this._updateNodeStyles(prev, props, state);
         this._updateZoom(prev, props);
 
@@ -232,6 +235,11 @@ class GraphGroup extends Component<GraphGroupProps> {
     private _updateGraph = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
         if (prev.graph !== props.graph)
             this.store.dispatch(graphChanged(props.graph));
+    }
+
+    private _updateNodeLabels = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+        if (prev.nodeLabels !== props.nodeLabels)
+            this.store.dispatch(nodeLabelsChanged(props.nodeLabels || {}))
     }
 
     private _updateNodeStyles = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps, state: RootState) => {

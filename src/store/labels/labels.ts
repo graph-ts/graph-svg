@@ -1,4 +1,4 @@
-import { cloneDeep, defaultTo } from 'lodash-es';
+import { defaultTo } from 'lodash-es';
 import { Dict, LabelDef } from '../../components/types';
 
 export interface LabelsState {
@@ -11,7 +11,7 @@ export const createLabelsState = (
     edgeLabels?: Dict<LabelDef[]>
 ): LabelsState => {
     return {
-        nodeLabels: cloneDeep(defaultTo(nodeLabels, {})),
-        edgeLabels: cloneDeep(defaultTo(edgeLabels, {}))
+        nodeLabels: defaultTo(nodeLabels, {}),
+        edgeLabels: defaultTo(edgeLabels, {})
     };
 }
