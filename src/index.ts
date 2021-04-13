@@ -13,9 +13,8 @@ export { default as GraphSVGDiv } from './GraphSVGDiv';
 /**
  * Export types
  */
-export type {
-    GraphGroupProps
-} from './GraphGroupProps';
+export type { GraphGroupProps } from './GraphGroupProps';
+export type { GraphSVGDivProps } from './GraphSVGDiv';
 export type {
     CircleDef,
     RectangleDef,

@@ -9,6 +9,9 @@ const labelsSlice = createSlice({
     name: 'labels',
     initialState,
     reducers: {
+        edgeLabelsChanged (state, action: PayloadAction<Dict<LabelDef[]>>) {
+            state.edgeLabels = castDraft(action.payload);
+        },
         nodeLabelsChanged (state, action: PayloadAction<Dict<LabelDef[]>>) {
             state.nodeLabels = castDraft(action.payload);
         }
@@ -16,6 +19,7 @@ const labelsSlice = createSlice({
 });
 
 export const {
+    edgeLabelsChanged,
     nodeLabelsChanged
 } = labelsSlice.actions;
 export default labelsSlice.reducer;

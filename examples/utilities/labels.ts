@@ -1,7 +1,9 @@
-import { Edge, Node } from '@graph-ts/graph-lib';
+import { Edge, getEdges, Graph, Node } from '@graph-ts/graph-lib';
 import { CSSProperties } from 'react';
 import { defaultTo } from 'lodash-es';
 import { Dict, LabelDef } from '../../src/components/types';
+import { randomString } from './random';
+import { randomLabelStyle } from './styles';
 
 /**
  * Create labels for every item in the provided list and return a dictionary
@@ -38,5 +40,45 @@ export function basicLabels (items: (Node | Edge)[], labelStyle?: CSSProperties)
 
     // Return the dictionary of labels
     return labelDefs;
+
+}
+
+export function randomEdgeLabel (edge: Edge, maxLines: number): LabelDef[] {
+
+    const labelDefs: LabelDef[] = [];
+
+    let line = Math.ceil(Math.random() * maxLines);
+    while (line-- > 0) {
+        labelDefs.push({
+            text: randomString(5),
+            style: randomLabelStyle()
+        });
+    }
+
+    distributeLabels(labelDefs);
+
+    return labelDefs;
+
+}
+
+export function randomEdgeLabels (graph: Graph, maxLines: number): Dict<LabelDef[]> {
+
+    const labelDefs: Dict<LabelDef[]> = {};
+
+    getEdges(graph).forEach(edge => {
+        labelDefs[edge.id] = randomEdgeLabel(edge, maxLines);
+    });
+
+    return labelDefs
+
+}
+
+function distributeLabels (labels: LabelDef[]) {
+
+    const start = 0.33 - (labels.length-1) / 2;
+    labels.forEach((label, i) => {
+        if (!label.props) label.props = {};
+        label.props.dy = `${start + i}em`
+    });
 
 }

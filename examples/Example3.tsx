@@ -1,4 +1,4 @@
-import { addEdge, addNode, getEdges, getNodes, Graph, newGraph, offsetNodes, someEdge } from '@graph-ts/graph-lib';
+import { addEdge, addNode, getEdges, getNodes, Graph, newGraph, someEdge } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import { CSSProperties, FC, useState } from 'react';
 import { identity, Matrix } from 'transformation-matrix';
@@ -83,8 +83,8 @@ export const Example3: FC = () => {
         setZoom(identity());
     }
 
-    const onSelectionDidMove = (nodeIDs: string[], offset: Vector2) => {
-        setGraph(offsetNodes(g, nodeIDs, offset));
+    const onGraphDidUpdate = (graph: Graph<Vector2>) => {
+        setGraph(graph);
     }
 
     const toggleInteraction = () => {
@@ -108,7 +108,7 @@ export const Example3: FC = () => {
             nodeStyles={nodeStyles}
             edgeStyles={edgeStyles}
             interactions={interactions}
-            onSelectionDidMove={onSelectionDidMove}
+            onGraphDidUpdate={onGraphDidUpdate}
             targetSpread={spread}
             targetZoom={zoom}/>
     </>

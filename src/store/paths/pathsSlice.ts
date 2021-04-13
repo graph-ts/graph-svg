@@ -1,6 +1,6 @@
 import { add, Vector2 } from '@graph-ts/vector2';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PathDef } from '../../components/types';
+import { Dict, PathDef } from '../../components/types';
 import { parseWaypointID } from '../../components/waypoint/waypointUtils';
 import { createPathsState, PathsState } from './paths';
 import { getWaypoints } from './pathsSelectors';
@@ -18,11 +18,12 @@ const pathsSlice = createSlice({
     name: 'paths',
     initialState,
     reducers: {
-
         defaultPathChanged (state, action: PayloadAction<PathDef | undefined>) {
             state.defaultPath = defaultTo(action.payload, EDGE_PATH);
         },
-
+        pathsChanged (state, action: PayloadAction<Dict<PathDef>>) {
+            state.byID = action.payload;
+        },
         waypointsOffset (state, action: PayloadAction<WaypointPositionUpdate>) {
 
             const { waypointIDs, offset } = action.payload;
@@ -39,12 +40,12 @@ const pathsSlice = createSlice({
             })
 
         }
-
     }
 });
 
 export const {
     defaultPathChanged,
+    pathsChanged,
     waypointsOffset
 } = pathsSlice.actions;
 export default pathsSlice.reducer;

@@ -1,4 +1,9 @@
+import { Graph } from '@graph-ts/graph-lib';
+import { Vector2 } from '@graph-ts/vector2';
 import { GraphState } from './graph';
+
+export const getGraph = (state: GraphState): Graph<Vector2> =>
+    state.graph;
 
 export const getEdge = (state: GraphState, edgeID: string) =>
     state.graph.edges[edgeID];

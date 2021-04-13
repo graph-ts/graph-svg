@@ -21,7 +21,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["node"],
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "dist/dts"
   },
   "include": [
     "src"

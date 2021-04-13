@@ -3,6 +3,7 @@ import { Vector2 } from '@graph-ts/vector2';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { defaultTo, keys } from 'lodash-es';
 import * as defaults from '../../components/defaults';
+import { DynamicStyles } from '../../components/types';
 import { graphChanged } from '../graph/graphSlice';
 import { SelectionUpdate } from '../selection/selection';
 import {
@@ -95,6 +96,9 @@ const stylesSlice = createSlice({
             });
 
         },
+        waypointStyleChanged (state, action: PayloadAction<DynamicStyles>) {
+            state.waypoint = action.payload;
+        }
     },
     extraReducers: builder => {
 
@@ -144,6 +148,7 @@ export const {
     edgeStyleDefaultsChanged,
     edgeStyleDefsChanged,
     nodeStyleDefaultsChanged,
-    nodeStyleDefsChanged
+    nodeStyleDefsChanged,
+    waypointStyleChanged
 } = stylesSlice.actions;
 export default stylesSlice.reducer;

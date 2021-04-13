@@ -1,4 +1,4 @@
-import { configureStore, EnhancedStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore, EnhancedStore, getDefaultMiddleware, Unsubscribe } from '@reduxjs/toolkit';
 import { Component, memo } from 'react';
 import { Provider } from 'react-redux';
 import { Defs } from './components/defs/Defs';
@@ -18,29 +18,33 @@ import {
 import { createGraphState } from './store/graph/graph';
 import graphReducer, { graphChanged } from './store/graph/graphSlice';
 import { createLabelsState } from './store/labels/labels';
-import labelsReducer, {
-    nodeLabelsChanged
-} from './store/labels/labelsSlice';
+import labelsReducer, { edgeLabelsChanged, nodeLabelsChanged } from './store/labels/labelsSlice';
 import { createPathsState } from './store/paths/paths';
-import pathsReducer, { defaultPathChanged } from './store/paths/pathsSlice';
+import pathsReducer, { defaultPathChanged, pathsChanged } from './store/paths/pathsSlice';
 import { createSelectionState } from './store/selection/selection';
 import selectionReducer from './store/selection/selectionSlice';
 import { createShapesState } from './store/shapes/shapes';
-import shapesReducer, { defaultShapeChanged } from './store/shapes/shapesSlice';
+import shapesReducer, { defaultShapeChanged, shapesChanged } from './store/shapes/shapesSlice';
 import { RootState } from './store/store';
 import { createStylesState } from './store/styles/styles';
 import stylesReducer, {
     edgeStyleDefaultsChanged,
     edgeStyleDefsChanged,
     nodeStyleDefaultsChanged,
-    nodeStyleDefsChanged
+    nodeStyleDefsChanged,
+    waypointStyleChanged
 } from './store/styles/stylesSlice';
+import { graphSubscription } from './subscribers/graphSubscription';
+import { selectionSubscription } from './subscribers/selectionSubscription';
 
 class GraphGroup extends Component<GraphGroupProps> {
 
     private readonly store: EnhancedStore<RootState>;
     private readonly gesture: Gesture;
     private readonly mouse: MouseMiddleware;
+
+    private unsubscribeGraphUpdate: Unsubscribe | undefined;
+    private unsubscribeSelectionUpdate: Unsubscribe | undefined;
 
     constructor (props: GraphGroupProps) {
 
@@ -69,6 +73,9 @@ class GraphGroup extends Component<GraphGroupProps> {
             devTools: isDev
         });
 
+        this.unsubscribeGraphUpdate = graphSubscription(this.store, props);
+        this.unsubscribeSelectionUpdate = selectionSubscription(this.store, props);
+
     }
 
     componentDidMount () {
@@ -92,10 +99,14 @@ class GraphGroup extends Component<GraphGroupProps> {
         this._updateDefaultPath(prev, props);
         this._updateDefaultShape(prev, props);
         this._updateDefaultStyles(prev, props, state);
+        this._updateEdgeLabels(prev, props);
+        this._updateEdgePaths(prev, props);
         this._updateEdgeStyles(prev, props, state);
         this._updateInteractionDisabled(prev, props);
         this._updateNodeLabels(prev, props);
+        this._updateNodeShapes(prev, props);
         this._updateNodeStyles(prev, props, state);
+        this._updateWaypointStyle(prev, props);
         this._updateZoom(prev, props);
 
     }
@@ -171,8 +182,19 @@ class GraphGroup extends Component<GraphGroupProps> {
     }
 
     private _updateCallbacks = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
-        if (prev.onSelectionDidMove !== props.onSelectionDidMove)
-            this.mouse.setOnSelectionDidMove(props.onSelectionDidMove);
+
+        // Determine which callbacks have changed
+        const nodeHovered = prev.onNodeHovered !== props.onNodeHovered;
+        const edgeHovered = prev.onEdgeHovered !== props.onEdgeHovered;
+        const selectionUpdate = prev.onSelectionDidUpdate !== props.onSelectionDidUpdate;
+        const graphUpdate = prev.onGraphDidUpdate !== props.onGraphDidUpdate;
+
+        // If they have, create new subscriptions
+        if (nodeHovered || edgeHovered || selectionUpdate)
+            this.unsubscribeSelectionUpdate = selectionSubscription(this.store, props, this.unsubscribeSelectionUpdate);
+        if (graphUpdate)
+            this.unsubscribeGraphUpdate = graphSubscription(this.store, props, this.unsubscribeGraphUpdate);
+
     }
 
     private _updateDefaultPath = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
@@ -208,6 +230,16 @@ class GraphGroup extends Component<GraphGroupProps> {
             }));
     }
 
+    private _updateEdgeLabels = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+        if (prev.edgeLabels !== props.edgeLabels)
+            this.store.dispatch(edgeLabelsChanged(props.edgeLabels || {}));
+    }
+
+    private _updateEdgePaths = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+        if (prev.edgePaths !== props.edgePaths)
+            this.store.dispatch(pathsChanged(props.edgePaths || {}));
+    }
+
     private _updateEdgeStyles = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps, state: RootState) => {
 
         // Determine if any of the three styling defs have changed
@@ -227,19 +259,24 @@ class GraphGroup extends Component<GraphGroupProps> {
 
     }
 
-    private _updateInteractionDisabled = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
-        if (prev.interactions !== props.interactions)
-            this.mouse.setInteractions(!!props.interactions);
-    }
-
     private _updateGraph = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
         if (prev.graph !== props.graph)
             this.store.dispatch(graphChanged(props.graph));
     }
 
+    private _updateInteractionDisabled = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+        if (prev.interactions !== props.interactions)
+            this.mouse.setInteractions(!!props.interactions);
+    }
+
     private _updateNodeLabels = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
         if (prev.nodeLabels !== props.nodeLabels)
             this.store.dispatch(nodeLabelsChanged(props.nodeLabels || {}))
+    }
+
+    private _updateNodeShapes = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+        if (prev.nodeShapes !== props.nodeShapes)
+            this.store.dispatch(shapesChanged(props.nodeShapes || {}));
     }
 
     private _updateNodeStyles = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps, state: RootState) => {
@@ -259,6 +296,22 @@ class GraphGroup extends Component<GraphGroupProps> {
             }));
         }
 
+    }
+
+    private _updateWaypointStyle = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+
+        // Determine if any of the three styling defs have changed
+        const styles = prev.waypointStyle !== props.waypointStyle;
+        const hovered = prev.waypointStyleHovered !== props.waypointStyleHovered;
+        const selected = prev.waypointStyleSelected !== props.waypointStyleSelected;
+
+        // If so, dispatch an event that will update the waypoint styles
+        if (styles || hovered || selected)
+            this.store.dispatch(waypointStyleChanged({
+                style: props.waypointStyle || {},
+                hovered: props.waypointStyleHovered || {},
+                selected: props.waypointStyleSelected || {}
+            }));
     }
 
     private _updateZoom = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {

@@ -44,6 +44,8 @@ export const getEdgeTarget = (state: RootState, edgeID: string) =>
     graphSelectors.getEdgeTarget(state.graph, edgeID);
 export const getEdgeTargetID = (state: RootState, edgeID: string) =>
     graphSelectors.getEdgeTargetID(state.graph, edgeID);
+export const getGraph = (state: RootState) =>
+    graphSelectors.getGraph(state.graph);
 export const getNode = (state: RootState, nodeID: string) =>
     graphSelectors.getNode(state.graph, nodeID);
 export const getNodeIDs = (state: RootState) =>

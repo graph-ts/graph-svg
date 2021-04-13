@@ -1,7 +1,7 @@
 import { createAction, Middleware } from '@reduxjs/toolkit';
 import { Matrix, toString } from 'transformation-matrix';
 import { EdgeMouseEvent, NodeMouseEvent, WaypointMouseEvent } from '../../components/types';
-import { GraphGroupProps, SelectionOffsetCallback } from '../../GraphGroupProps';
+import { GraphGroupProps } from '../../GraphGroupProps';
 import { RootState } from '../../store/store';
 import { makeDragDispatcher } from './drag';
 import { Gesture } from './gesture';
@@ -34,7 +34,6 @@ export const spreadTargetSet = createAction<Matrix>('mouse/spreadTargetSet');
 
 export type MouseMiddleware = Middleware<{}, RootState> & {
     setInteractions: (enabled: boolean) => void
-    setOnSelectionDidMove: (callback: SelectionOffsetCallback | undefined) => void
     setZoomElement: (element: SVGElement) => void
     setZoom: (target: Matrix) => void
 };
@@ -69,7 +68,7 @@ export const mouseMiddleware = (props: GraphGroupProps, gesture: Gesture): Mouse
     const onMouseHoveredNode = onMouseHoveredNodeHandler(gesture);
     const onMouseHoveredWaypoint = onMouseHoveredWaypointHandler(gesture);
     const onMouseMoved = onMouseMovedHandler(gesture, dragDispatch, setZoomTransform);
-    const onMouseUpped = onMouseUppedHandler(gesture, dragDispatch, props.onSelectionDidMove);
+    const onMouseUpped = onMouseUppedHandler(gesture, dragDispatch);
     const onMouseWheeled = onMouseWheeledHandler(gesture, setZoomTransform);
     const onSpreadSet = onSpreadSetHandler(gesture);
 
@@ -100,10 +99,6 @@ export const mouseMiddleware = (props: GraphGroupProps, gesture: Gesture): Mouse
 
     middleware.setInteractions = (enabled: boolean) => {
         interactions = enabled;
-    };
-
-    middleware.setOnSelectionDidMove = (callback: SelectionOffsetCallback | undefined) => {
-        onMouseUpped.setOnSelectionDidMove(callback);
     };
 
     middleware.setZoom = (target: Matrix) => {
