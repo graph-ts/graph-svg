@@ -1,7 +1,18 @@
-import { Edge, getNode, Graph } from '@graph-ts/graph-lib';
-import { add, length, multiplyScalar, normal, perpendicular, subtract, Vector2 } from '@graph-ts/vector2';
+import { Edge, getEdges, getNode, Graph, Node } from '@graph-ts/graph-lib';
+import {
+    add,
+    angle,
+    distance,
+    length,
+    multiplyScalar,
+    normal,
+    perpendicular, rotate,
+    subtract, translate,
+    Vector2
+} from '@graph-ts/vector2';
 import { compact, defaultTo } from 'lodash-es';
 import { Dict, PathDef } from '../../src/components/types';
+import { pickRandom, randomNumber, randomPathType } from './random';
 
 type PositionedGraph = Graph<Vector2>;
 
@@ -57,6 +68,41 @@ export function rightCurves (graph: PositionedGraph, edges: Edge[], offset?: num
             waypoints: compact([waypoint(edge)])
         }
     });
+
+    return pathDefs;
+
+}
+
+export function randomEdgePath (edge: Edge, source: Node<Vector2>, target: Node<Vector2>, maxWaypoints: number, maxDistFromCenter: number): PathDef {
+
+    const waypoints: Vector2[] = [];
+    const numWaypoints = Math.round(randomNumber(-0.5, maxWaypoints+0.5));
+    const dd = 1 / (numWaypoints + 1);
+    const ng = angle(subtract(target, source));
+    const dist = distance(source, target);
+
+    for (let n=0; n<numWaypoints; ++n) {
+        const wp = translate(source, ng, (n+1)*dd*dist);
+        const fuzz = translate(wp, ng, Math.random()*maxDistFromCenter);
+        waypoints.push(rotate(fuzz, wp, pickRandom([-1, 1]) * Math.PI / 2));
+    }
+
+    return {
+        type: randomPathType(),
+        waypoints: waypoints
+    }
+}
+
+export function randomEdgePaths (graph: Graph<Vector2, {}>, maxWaypoints: number, maxDistFromCenter: number): Dict<PathDef> {
+
+    const pathDefs: Dict<PathDef> = {};
+
+    getEdges(graph).forEach(edge => {
+        const source = getNode(graph, edge.source);
+        const target = getNode(graph, edge.target);
+        if (source && target)
+            pathDefs[edge.id] = randomEdgePath(edge, source, target, maxWaypoints, maxDistFromCenter)
+    })
 
     return pathDefs;
 

@@ -7,8 +7,20 @@ interface ButtonProps {
     disabled?: boolean
 }
 
-export const ButtonBar: FC = props => {
-    return <div className={'button-bar'}>
+interface ButtonBarProps {
+    vertical?: boolean
+}
+
+export const ButtonBarContainer: FC<ButtonBarProps> = props => {
+    const direction = props.vertical ? 'vertical' : 'horizontal';
+    return <div className={`button-bar-container ${direction}`}>
+        { props.children }
+    </div>
+}
+
+export const ButtonBar: FC<ButtonBarProps> = props => {
+    const direction = props.vertical ? 'vertical' : 'horizontal';
+    return <div className={`button-bar ${direction}`}>
         { props.children }
     </div>
 }

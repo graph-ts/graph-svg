@@ -1,6 +1,7 @@
-import { Node } from '@graph-ts/graph-lib';
+import { getNodes, Graph, Node } from '@graph-ts/graph-lib';
 import { defaultTo } from 'lodash-es';
 import { Dict, RectangleDef, ShapeDef } from '../../src/components/types';
+import { pickRandom, randomNumber } from './random';
 
 export function basicRectangles (nodes: Node[], width?: number, height?: number): Dict<ShapeDef> {
 
@@ -20,6 +21,39 @@ export function basicRectangles (nodes: Node[], width?: number, height?: number)
     });
 
     // Return the dictionary of shape defs
+    return shapeDefs;
+
+}
+
+export function randomNodeShape (minsize: number, maxsize: number): ShapeDef {
+
+    const shape = pickRandom(['circle', 'rectangle']);
+
+    if (shape === 'circle') {
+        return {
+            shape,
+            radius: randomNumber(minsize, maxsize)
+        }
+    }
+
+    else {
+        return {
+            shape: 'rectangle',
+            width: randomNumber(minsize, maxsize),
+            height: randomNumber(minsize, maxsize)
+        }
+    }
+
+}
+
+export function randomNodeShapes (graph: Graph, minsize: number, maxsize: number): Dict<ShapeDef> {
+
+    const shapeDefs: Dict<ShapeDef> = {};
+
+    getNodes(graph).forEach(node => {
+        shapeDefs[node.id] = randomNodeShape(minsize, maxsize)
+    });
+
     return shapeDefs;
 
 }

@@ -40,18 +40,18 @@ export type ShapeDef = (CircleDef | RectangleDef) & {
 
 
 // Paths
-type BSplineDef =    { type: 'bspline' }
-type BundleDef =     { type: 'bundle', beta?: number }
-type CardinalDef =   { type: 'cardinal', tension?: number }
-type CatmullRomDef = { type: 'catmullrom', alpha?: number }
-type LineDef =       { type: 'line' }
-type MonotoneXDef =  { type: 'monotonex' }
-type MonotoneYDef =  { type: 'monotoney' }
-type NaturalDef =    { type: 'natural' }
-type StepDef =       { type: 'step' }
-type StepAfterDef =  { type: 'stepafter' }
-type StepBeforeDef = { type: 'stepbefore' }
-type CurveDef =
+export type BSplineDef =    { type: 'bspline' }
+export type BundleDef =     { type: 'bundle', beta?: number }
+export type CardinalDef =   { type: 'cardinal', tension?: number }
+export type CatmullRomDef = { type: 'catmullrom', alpha?: number }
+export type LineDef =       { type: 'line' }
+export type MonotoneXDef =  { type: 'monotonex' }
+export type MonotoneYDef =  { type: 'monotoney' }
+export type NaturalDef =    { type: 'natural' }
+export type StepDef =       { type: 'step' }
+export type StepAfterDef =  { type: 'stepafter' }
+export type StepBeforeDef = { type: 'stepbefore' }
+export type CurveDef =
     BSplineDef | BundleDef | CardinalDef |
     CatmullRomDef | LineDef | MonotoneXDef |
     MonotoneYDef | NaturalDef | StepDef |

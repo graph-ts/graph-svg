@@ -23,6 +23,7 @@ export function randomLabelStyle (): CSSProperties {
 export function randomNodeStyle (): CSSProperties {
     return {
         stroke: randomColor(),
-        fill: randomColor()
+        fill: randomColor(),
+        cursor: 'pointer'
     };
 }
