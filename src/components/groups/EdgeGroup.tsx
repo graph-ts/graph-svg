@@ -3,7 +3,6 @@ import React, { FC, memo, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { mouseDownedEdge, mouseEnteredEdge, mouseLeftEdge } from '../../middleware/mouse/middleware';
 import { getHoveredEdgeID, RootState } from '../../store/store';
-import EdgeLabel from '../label/EdgeLabel';
 import Path from '../path/Path';
 import { BoundEdgeID } from '../types';
 import WaypointsGroup from './WaypointsGroup';
@@ -11,6 +10,14 @@ import WaypointsGroup from './WaypointsGroup';
 export type EdgeGroupProps = BoundEdgeID;
 
 const EdgeGroup: FC<EdgeGroupProps> = props => {
+
+    /**
+     * Ideas:
+     *   * In here, create the function that calculates the label positions and
+     *     pass that to the Path. Then in Path call the function from inside
+     *     useLayoutEffect(). Inside that function is a call to setState for
+     *     a variable here. That variable passed to labels as resolved positions.
+     */
 
     const { edgeID } = props;
 
@@ -47,8 +54,7 @@ const EdgeGroup: FC<EdgeGroupProps> = props => {
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}>
         <Path edgeID={edgeID}/>
-        <WaypointsGroup edgeID={edgeID}/>
-        <EdgeLabel edgeID={edgeID}/>
+        { hovered && <WaypointsGroup edgeID={edgeID}/> }
     </g>
 
 }

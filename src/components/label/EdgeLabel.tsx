@@ -7,7 +7,11 @@ import { getEdgeLabel, RootState } from '../../store/store';
 import { BoundEdgeID } from '../types';
 import Label from './Label';
 
-const EdgeLabel: FC<BoundEdgeID> = props => {
+interface TestProps {
+    center?: DOMPoint
+}
+
+const EdgeLabel: FC<BoundEdgeID & TestProps> = props => {
 
     const { edgeID } = props;
 
@@ -22,7 +26,7 @@ const EdgeLabel: FC<BoundEdgeID> = props => {
     if (!labelDefs) return null;
 
     // For now we'll just render right in the middle of the path
-    const position = average(source, target);
+    const position = props.center || average(source, target);
 
     return <>{
         labelDefs.map((def, i) =>

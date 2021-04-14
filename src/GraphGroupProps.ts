@@ -2,7 +2,7 @@ import { Graph } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import { CSSProperties } from 'react';
 import { Matrix } from 'transformation-matrix';
-import { Dict, LabelDef, PathDef, ShapeDef } from './components/types';
+import { Dict, EdgeLabelDef, LabelDef, PathDef, ShapeDef } from './components/types';
 
 export interface GraphUpdateCallback {
     (graph: Graph<Vector2>): void
@@ -38,7 +38,7 @@ export interface GraphGroupProps {
     //
     defaultShape?: ShapeDef
     //
-    edgeLabels?: Dict<LabelDef[]>
+    edgeLabels?: Dict<EdgeLabelDef[]>
     //
     edgePaths?: Dict<PathDef>
     //

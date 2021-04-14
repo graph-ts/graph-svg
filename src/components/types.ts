@@ -73,6 +73,21 @@ export type LabelDef = {
     style?: CSSProperties
 };
 
+/**
+ * An EdgeLabelPosition is either a number in the range [0, 1]
+ * which describes a point at some percentage of the total length
+ * of the path, or an object that describes an absolute distance
+ * in pixels along the path, starting at either the source or
+ * target.
+ */
+export type EdgeLabelPosition = number | {
+    distance: number
+    from: 'source' | 'target'
+}
+export type EdgeLabelDef = LabelDef & {
+    position?: EdgeLabelPosition
+}
+
 
 // Styles
 export interface Styled { style: CSSProperties }
