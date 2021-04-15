@@ -1,20 +1,19 @@
 import { defaultTo, omit } from 'lodash-es';
-import { FC, memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { FC, memo, useLayoutEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getResolvedPathPoints } from '../../selectors/getResolvedPathPoints';
 import { getEdgeStyle, getPath, RootState } from '../../store/store';
 import { arrowheadID } from '../defs/arrowheads/utilities';
-import EdgeLabel from '../label/EdgeLabel';
 import { BoundEdgeID } from '../types';
 import { buildPathGenerator } from './pathUtils';
 
-type PathProps = BoundEdgeID;
+type PathProps = BoundEdgeID & {
+    onPathRendered?: (path: SVGPathElement) => void
+};
 
 const Path: FC<PathProps> = props => {
 
     const { edgeID } = props;
-
-    const [center, setCenter] = useState<DOMPoint>();
 
     const pathDef = useSelector((state: RootState) => getPath(state, edgeID));
     const style = useSelector((state: RootState) => getEdgeStyle(state, edgeID));
@@ -27,16 +26,15 @@ const Path: FC<PathProps> = props => {
     const pathGenerator = useMemo(() => buildPathGenerator(pathDef), [pathDef]);
     const path = useMemo(() => defaultTo(pathGenerator(points), ''), [pathGenerator, points]);
 
-    /**
-     * There are two things that depend on the SVG Path API, specifically
-     * the path.getPointAtLength() method:
-     *   * The point along the path where rendering should *actually* stop to leave room for the arrowhead
-     *   * The position of the label along the path
-     */
     useLayoutEffect(() => {
+
         const hover = hoverRef.current;
         const render = renderRef.current;
+
         if (hover && render) {
+
+            // Regenerate the render path by removing 10 pixels from the
+            // hover path's length.
             const length = hover.getTotalLength();
             const pt = hover.getPointAtLength(length - 10);
             render.setAttribute('d', defaultTo(
@@ -44,12 +42,13 @@ const Path: FC<PathProps> = props => {
                 ''
             ));
 
-            const half = hover.getPointAtLength(length / 2);
-            if (!center || (center.x !== half.x || center.y !== half.y)) {
-                setCenter(half);
-            }
+            // If a callback is provided, call it
+            if (props.onPathRendered)
+                props.onPathRendered(hover);
+
         }
-    })
+
+    });
 
     return <>
         <path
@@ -62,7 +61,6 @@ const Path: FC<PathProps> = props => {
             style={hoverStyle}
             stroke={'transparent'}
             strokeWidth={11}/>
-        <EdgeLabel center={center} edgeID={edgeID}/>
     </>
 
 }

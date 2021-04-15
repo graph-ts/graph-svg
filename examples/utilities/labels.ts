@@ -1,8 +1,8 @@
 import { Edge, getEdges, Graph, Node } from '@graph-ts/graph-lib';
 import { CSSProperties } from 'react';
 import { defaultTo } from 'lodash-es';
-import { Dict, LabelDef } from '../../src/components/types';
-import { randomString } from './random';
+import { Dict, EdgeLabelDef, EdgeLabelPosition, LabelDef } from '../../src/components/types';
+import { pickRandom, randomNumber, randomString } from './random';
 import { randomLabelStyle } from './styles';
 
 /**
@@ -43,15 +43,16 @@ export function basicLabels (items: (Node | Edge)[], labelStyle?: CSSProperties)
 
 }
 
-export function randomEdgeLabel (edge: Edge, maxLines: number): LabelDef[] {
+export function randomEdgeLabel (edge: Edge, maxLines: number): EdgeLabelDef[] {
 
-    const labelDefs: LabelDef[] = [];
+    const labelDefs: EdgeLabelDef[] = [];
 
     let line = Math.ceil(Math.random() * maxLines);
     while (line-- > 0) {
         labelDefs.push({
             text: randomString(5),
-            style: randomLabelStyle()
+            style: randomLabelStyle(),
+            position: randomEdgeLabelPosition()
         });
     }
 
@@ -61,7 +62,7 @@ export function randomEdgeLabel (edge: Edge, maxLines: number): LabelDef[] {
 
 }
 
-export function randomEdgeLabels (graph: Graph, maxLines: number): Dict<LabelDef[]> {
+export function randomEdgeLabels (graph: Graph, maxLines: number): Dict<EdgeLabelDef[]> {
 
     const labelDefs: Dict<LabelDef[]> = {};
 
@@ -71,6 +72,15 @@ export function randomEdgeLabels (graph: Graph, maxLines: number): Dict<LabelDef
 
     return labelDefs
 
+}
+
+export function randomEdgeLabelPosition (): number | EdgeLabelPosition {
+    const choice = pickRandom([0, 1]);
+    if (choice === 0) return randomNumber(0, 1);
+    return {
+        from: pickRandom(['source', 'target']),
+        distance: randomNumber(0, 100)
+    }
 }
 
 function distributeLabels (labels: LabelDef[]) {

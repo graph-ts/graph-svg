@@ -74,16 +74,20 @@ export type LabelDef = {
 };
 
 /**
- * An EdgeLabelPosition is either a number in the range [0, 1]
- * which describes a point at some percentage of the total length
- * of the path, or an object that describes an absolute distance
- * in pixels along the path, starting at either the source or
- * target.
+ * A number in the range [0, 1] which describes a point at some
+ * percentage along the total length of the path, or an object
+ * that describes an absolute distance in pixels along the path,
+ * starting at either the source or target.
  */
 export type EdgeLabelPosition = number | {
     distance: number
     from: 'source' | 'target'
 }
+
+/**
+ * A LabelDef with an optional EdgeLabelPosition that describes
+ * where along an edge's path the label should be placed.
+ */
 export type EdgeLabelDef = LabelDef & {
     position?: EdgeLabelPosition
 }
