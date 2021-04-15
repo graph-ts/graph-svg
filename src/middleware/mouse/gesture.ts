@@ -110,10 +110,19 @@ class Gesture {
         return matrix;
     }
 
+    setSVG (svg: SVGSVGElement): void {
+        this._svg = svg;
+        this._pt = svg.createSVGPoint();
+    }
+
     setZoom (matrix: Matrix): Matrix {
         this._zoomTransform = matrix;
         this._zoomTransformInv = inverse(matrix);
         return matrix;
+    }
+
+    setZoomFactor (zoomFactor: number): void {
+        this._scaleFactor = zoomFactor;
     }
 
     translate (event: MouseEvent): Matrix {

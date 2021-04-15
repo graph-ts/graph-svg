@@ -83,3 +83,9 @@ export const WAYPOINT_SELECTED_STYLE: CSSProperties = {
     stroke: '#333',
     strokeWidth: 2
 };
+
+
+/**
+ * Gestures, etc.
+ */
+export const ZOOM_FACTOR = 1.035;

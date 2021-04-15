@@ -36,6 +36,7 @@ import stylesReducer, {
 } from './store/styles/stylesSlice';
 import { graphSubscription } from './subscribers/graphSubscription';
 import { selectionSubscription } from './subscribers/selectionSubscription';
+import { ZOOM_FACTOR } from './components/defaults';
 
 class GraphGroup extends Component<GraphGroupProps> {
 
@@ -53,7 +54,7 @@ class GraphGroup extends Component<GraphGroupProps> {
         // @ts-ignore
         const isDev = process.env.NODE_ENV === 'development';
 
-        this.gesture = new Gesture(props.svg, 1.035);
+        this.gesture = new Gesture(props.svg, props.zoomScaleFactor || ZOOM_FACTOR);
         this.mouse = mouseMiddleware(props, this.gesture);
 
         this.store = configureStore({
@@ -106,6 +107,7 @@ class GraphGroup extends Component<GraphGroupProps> {
         this._updateNodeLabels(prev, props);
         this._updateNodeShapes(prev, props);
         this._updateNodeStyles(prev, props, state);
+        this._updateSVG(prev, props);
         this._updateWaypointStyle(prev, props);
         this._updateZoom(prev, props);
 
@@ -298,6 +300,21 @@ class GraphGroup extends Component<GraphGroupProps> {
 
     }
 
+    private _updateSVG = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
+
+        if (prev.svg !== props.svg) {
+            prev.svg.removeEventListener('mousedown', this._onMouseDown);
+            prev.svg.removeEventListener('mousemove', this._onMouseMove);
+            prev.svg.removeEventListener('mouseup', this._onMouseUp);
+            prev.svg.removeEventListener('wheel', this._onMouseWheel);
+            props.svg.addEventListener('mousedown', this._onMouseDown);
+            props.svg.addEventListener('mousemove', this._onMouseMove);
+            props.svg.addEventListener('mouseup', this._onMouseUp);
+            props.svg.addEventListener('wheel', this._onMouseWheel);
+        }
+
+    }
+
     private _updateWaypointStyle = (prev: Readonly<GraphGroupProps>, props: GraphGroupProps) => {
 
         // Determine if any of the three styling defs have changed
@@ -320,6 +337,8 @@ class GraphGroup extends Component<GraphGroupProps> {
             if (props.targetZoom) this.mouse.setZoom(props.targetZoom);
         if (prev.targetSpread !== props.targetSpread)
             if (props.targetSpread) this.store.dispatch(spreadTargetSet(props.targetSpread));
+        if (prev.zoomScaleFactor !== props.zoomScaleFactor)
+            this.gesture.setZoomFactor(props.zoomScaleFactor || ZOOM_FACTOR);
 
     }
 
