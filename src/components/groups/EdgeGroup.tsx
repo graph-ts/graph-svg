@@ -8,7 +8,9 @@ import Path from '../path/Path';
 import { BoundEdgeID } from '../types';
 import WaypointsGroup from './WaypointsGroup';
 
-export type EdgeGroupProps = BoundEdgeID;
+export type EdgeGroupProps = BoundEdgeID & {
+    selected?: boolean
+};
 
 const EdgeGroup: FC<EdgeGroupProps> = props => {
 
@@ -67,7 +69,7 @@ const EdgeGroup: FC<EdgeGroupProps> = props => {
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}>
         <Path edgeID={edgeID} onPathRendered={onPathRendered}/>
-        { hovered && <WaypointsGroup edgeID={edgeID}/> }
+        { props.selected && <WaypointsGroup edgeID={edgeID}/> }
         <EdgeLabel edgeID={edgeID} labelPositions={labelPositions}/>
     </g>
 

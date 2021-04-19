@@ -186,7 +186,7 @@ export function selectNodes (state: RootState, nodeIDs: string[]): SelectionUpda
 }
 
 /**
- * Build a selection update to select a set of waypoints, clearing all other selection types.
+ * Build a selection update to select a set of waypoints, clearing node selection.
  * @param state The store state
  * @param waypointIDs An array of waypoint IDs
  */
@@ -204,7 +204,6 @@ export function selectWaypoints (state: RootState, waypointIDs: string[]): Selec
 
     return {
         nodes: deselectAllNodes(state),
-        edges: deselectAllEdges(state),
         waypoints: {
             selection: waypointIDs,
             hover: hoveredWaypointID,

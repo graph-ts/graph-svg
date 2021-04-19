@@ -13,7 +13,8 @@ const EdgesGroupSelected: FC<EdgesGroupSelectedProps> = props => {
             edgeIDs.map((edgeID: string) => {
                 return <EdgeGroup
                     key={edgeID}
-                    edgeID={edgeID}/>
+                    edgeID={edgeID}
+                    selected={true}/>
             })
         }
     </g>
