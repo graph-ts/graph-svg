@@ -1,12 +1,11 @@
 import { Edge, getEdges, getNodes, Graph, newGraph, Node } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import { FC } from 'react';
+import { PositionedNode } from '../src';
 import GraphSVGDiv from '../src/GraphSVGDiv';
 import { basicLabels } from './utilities/labels';
 import { rightCurves } from './utilities/paths';
 // import { basicRectangles } from './utilities/shapes';
-
-type PositionedGraph = Graph<Vector2>;
 
 export const Example2: FC = () => {
 
@@ -35,7 +34,7 @@ export const Example2: FC = () => {
 
 }
 
-function makegraph (): PositionedGraph {
+function makegraph (): Graph<PositionedNode> {
     const nodes: Node<Vector2>[] = [
         { id: 'A', x: -200, y: 0 },
         { id: 'B', x:  200, y: 0 }

@@ -1,11 +1,13 @@
-import { FC, memo, useMemo, useRef } from 'react';
+import { Edge } from '@graph-ts/graph-lib';
+import { useMemo, useRef } from 'react';
 import GraphGroup from './GraphGroup';
-import { GraphGroupProps } from './GraphGroupProps';
+import { GraphGroupProps, PositionedNode } from './GraphGroupProps';
 import useDimensions from './hooks/useDimensions';
+import { typedMemo } from './typedMemo';
 
-export type GraphSVGDivProps = Omit<GraphGroupProps, 'svg'>;
+export type GraphSVGDivProps<N extends PositionedNode, E extends Edge> = Omit<GraphGroupProps<N, E>, 'svg'>;
 
-const GraphSVGDiv: FC<GraphSVGDivProps> = props => {
+const GraphSVGDiv = <N extends PositionedNode, E extends Edge>(props: GraphSVGDivProps<N, E>) => {
 
     const divRef = useRef<HTMLDivElement>(null);
     const svgRef = useRef<SVGSVGElement>(null);
@@ -25,7 +27,7 @@ const GraphSVGDiv: FC<GraphSVGDivProps> = props => {
              preserveAspectRatio={'xMidYMid slice'}>
             {
                 svgRef.current && width && height &&
-                    <GraphGroup
+                    <GraphGroup<N, E>
                         svg={svgRef.current}
                         {...props}/>
             }
@@ -34,4 +36,4 @@ const GraphSVGDiv: FC<GraphSVGDivProps> = props => {
 
 }
 
-export default memo(GraphSVGDiv);
+export default typedMemo(GraphSVGDiv);

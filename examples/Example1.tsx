@@ -1,7 +1,7 @@
 import { Edge, getEdges, getNodes, Graph, newGraph, Node } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import React, { CSSProperties } from 'react';
-import { Dict, LabelDef, PathDef } from '../src/components/types';
+import { Dict, LabelDef, PathDef } from '../src';
 import GraphGroup from '../src/GraphGroup';
 
 type AlloyGraph = Graph<AlloyNode, AlloyEdge>;

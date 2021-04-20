@@ -1,23 +1,16 @@
-import { Graph } from '@graph-ts/graph-lib';
+import { Edge, Graph, Node } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import { CSSProperties } from 'react';
 import { Matrix } from 'transformation-matrix';
 import { Dict, EdgeLabelDef, LabelDef, PathDef, ShapeDef } from './components/types';
 
-export interface GraphUpdateCallback {
-    (graph: Graph<Vector2>): void
-}
+export type PositionedNode = Node<Vector2>;
 
-export interface HoverUpdateCallback {
-    (id: string | null): void
-}
+export type HoverUpdateCallback = (id: string | null) => void;
+export type SelectionUpdateCallback = (nodeIDs: string[], edgeIDs: string[]) => void
 
-export interface SelectionUpdateCallback {
-    (nodeIDs: string[], edgeIDs: string[]): void
-}
-
-export interface GraphGroupProps {
-    graph: Graph<Vector2>
+export interface GraphGroupProps<N extends PositionedNode, E extends Edge> {
+    graph: Graph<N, E>
     svg: SVGSVGElement
     defaultEdgeStyle?: CSSProperties
     defaultEdgeStyleHovered?: CSSProperties
@@ -39,7 +32,7 @@ export interface GraphGroupProps {
     nodeStylesHovered?: Dict<CSSProperties>
     nodeStylesSelected?: Dict<CSSProperties>
     onEdgeHovered?: HoverUpdateCallback
-    onGraphDidUpdate?: GraphUpdateCallback
+    onGraphDidUpdate?: (graph: Graph<N, E>) => void;
     onNodeHovered?: HoverUpdateCallback
     onSelectionDidUpdate?: SelectionUpdateCallback
     targetSpread?: Matrix

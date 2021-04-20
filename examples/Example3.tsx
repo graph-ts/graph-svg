@@ -1,17 +1,14 @@
 import { addEdge, addNode, getEdges, getNodes, Graph, newGraph, someEdge } from '@graph-ts/graph-lib';
-import { Vector2 } from '@graph-ts/vector2';
 import { CSSProperties, FC, useState } from 'react';
 import { identity, Matrix } from 'transformation-matrix';
-import { Dict } from '../src/components/types';
+import { Dict, PositionedNode } from '../src';
 import GraphSVGDiv from '../src/GraphSVGDiv';
 import { Button, ButtonBar, Separator } from './ui/ButtonBar';
 import { randomEdgeStyle, randomNodeStyle } from './utilities/styles';
 
-type PositionedGraph = Graph<Vector2>
-
 export const Example3: FC = () => {
 
-    const [g, setGraph] = useState<PositionedGraph>(newGraph());
+    const [g, setGraph] = useState<Graph<PositionedNode>>(newGraph());
     const [nextID, setNextID] = useState<string>('0');
     const [canAddEdge, setCanAddEdge] = useState<boolean>(false);
 
@@ -83,7 +80,7 @@ export const Example3: FC = () => {
         setZoom(identity());
     }
 
-    const onGraphDidUpdate = (graph: Graph<Vector2>) => {
+    const onGraphDidUpdate = (graph: Graph<PositionedNode>) => {
         setGraph(graph);
     }
 

@@ -1,13 +1,11 @@
 import { Edge, getNodes, Graph, newGraph, Node } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import React from 'react';
-import { Dict, LabelDef } from '../src/components/types';
+import { Dict, LabelDef, PositionedNode } from '../src';
 import GraphGroup from '../src/GraphGroup';
 
-type PositionedGraph = Graph<Vector2>;
-
 interface Example0State {
-    graph: PositionedGraph
+    graph: Graph<PositionedNode>
     nodeLabels: Dict<LabelDef[]>
     width: number
     height: number
@@ -21,7 +19,7 @@ class Example0 extends React.Component<any, Example0State> {
 
         super(props);
 
-        const graph: PositionedGraph = circleGraph(300, 10);
+        const graph: Graph<PositionedNode> = circleGraph(300, 10);
         const nodeLabels: Dict<LabelDef[]> = {};
 
         getNodes(graph).forEach(node => {
@@ -101,7 +99,7 @@ class Example0 extends React.Component<any, Example0State> {
 
 export { Example0 };
 
-function circleGraph (radius: number, count: number): PositionedGraph {
+function circleGraph (radius: number, count: number): Graph<PositionedNode> {
     const nodes: Node<Vector2>[] = [{ id: '0', x: 0, y: 0}];
     const edges: Edge[] = [];
     let i = 0;
