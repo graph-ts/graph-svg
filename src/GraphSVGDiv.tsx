@@ -3,7 +3,7 @@ import { useMemo, useRef } from 'react';
 import GraphGroup from './GraphGroup';
 import { GraphGroupProps, PositionedNode } from './GraphGroupProps';
 import useDimensions from './hooks/useDimensions';
-import { typedMemo } from './typedMemo';
+import { typedMemo } from './utilities/typedMemo';
 
 export type GraphSVGDivProps<N extends PositionedNode, E extends Edge> = Omit<GraphGroupProps<N, E>, 'svg'>;
 

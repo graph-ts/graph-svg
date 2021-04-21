@@ -38,7 +38,7 @@ import stylesReducer, {
 } from './store/styles/stylesSlice';
 import { graphSubscription } from './subscribers/graphSubscription';
 import { selectionSubscription } from './subscribers/selectionSubscription';
-import { typedMemo } from './typedMemo';
+import { typedMemo } from './utilities/typedMemo';
 
 class GraphGroup<N extends PositionedNode, E extends Edge> extends Component<GraphGroupProps<N, E>> {
 

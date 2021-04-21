@@ -1,4 +1,4 @@
-import { Edge, getNodes, newGraph } from '@graph-ts/graph-lib';
+import { Edge, newGraph } from '@graph-ts/graph-lib';
 import { CSSProperties, FC, useState } from 'react';
 import { Dict, DynamicStyles, LabelDef, PathDef, ShapeDef } from '../src/components/types';
 import { HoverUpdateCallback, PositionedNode, SelectionUpdateCallback } from '../src/GraphGroupProps';
@@ -9,8 +9,6 @@ import { randomEdgePaths } from './utilities/paths';
 import { randomString } from './utilities/random';
 import { randomNodeShapes } from './utilities/shapes';
 import { randomNodeStyle } from './utilities/styles';
-
-type CoolNode = PositionedNode & { cool: 'beans' };
 
 export const Example4: FC = () => {
 
@@ -25,10 +23,10 @@ export const Example4: FC = () => {
     const [selectionUpdateCallback, setSelectionUpdateCallback] = useState<SelectionUpdateCallback>(() => {});
 
     const d = 200;
-    const g = newGraph<CoolNode, Edge>([
-        { id: 'a', x: d * Math.cos(2 * Math.PI / 3), y: d * Math.sin(2 * Math.PI / 3), cool: 'beans' },
-        { id: 'b', x: d * Math.cos(4 * Math.PI / 3), y: d * Math.sin(4 * Math.PI / 3), cool: 'beans' },
-        { id: 'c', x: d * Math.cos(6 * Math.PI / 3), y: d * Math.sin(6 * Math.PI / 3), cool: 'beans' }
+    const g = newGraph<PositionedNode, Edge>([
+        { id: 'a', x: d * Math.cos(2 * Math.PI / 3), y: d * Math.sin(2 * Math.PI / 3) },
+        { id: 'b', x: d * Math.cos(4 * Math.PI / 3), y: d * Math.sin(4 * Math.PI / 3) },
+        { id: 'c', x: d * Math.cos(6 * Math.PI / 3), y: d * Math.sin(6 * Math.PI / 3) }
     ], [
         { id: 'ab', source: 'a', target: 'b' },
         { id: 'bc', source: 'b', target: 'c' },
@@ -108,11 +106,6 @@ export const Example4: FC = () => {
             onEdgeHovered={edgeHoverCallback}
             onNodeHovered={nodeHoverCallback}
             onSelectionDidUpdate={selectionUpdateCallback}
-            onGraphDidUpdate={(graph) => {
-                getNodes(graph).forEach(node => {
-                    console.log(node.cool);
-                })
-            }}
         />
     </ButtonBarContainer>
 
