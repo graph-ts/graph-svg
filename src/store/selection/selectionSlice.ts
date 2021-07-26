@@ -1,31 +1,16 @@
-import { Vector2 } from '@graph-ts/vector2';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createSelectionState, SelectionState, SelectionUpdate } from './selection';
+import { createSlice } from '@reduxjs/toolkit';
+import { graphChanged } from '../graph/graphSlice';
+import { createSelectionState, SelectionState } from './selection';
+import { extraReducers, reducers } from './selectionReducers';
 
 const initialState: SelectionState = createSelectionState();
 
 const selectionSlice = createSlice({
     name: 'selection',
     initialState,
-    reducers: {
-        dragOffsetChanged (state, action: PayloadAction<Vector2>) {
-            state.dragOffset = action.payload;
-        },
-        selectionChanged (state, action: PayloadAction<SelectionUpdate>) {
-            const { nodes, edges, waypoints } = action.payload;
-            if (nodes) {
-                state.nodeIDs = nodes.selection;
-                state.hoveredNodeID = nodes.hover;
-            }
-            if (edges) {
-                state.edgeIDs = edges.selection;
-                state.hoveredEdgeID = edges.hover;
-            }
-            if (waypoints) {
-                state.waypointIDs = waypoints.selection;
-                state.hoveredWaypointID = waypoints.hover;
-            }
-        }
+    reducers,
+    extraReducers: builder => {
+        builder.addCase(graphChanged, extraReducers.graphChanged)
     }
 });
 

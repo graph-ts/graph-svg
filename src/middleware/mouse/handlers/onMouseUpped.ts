@@ -28,15 +28,17 @@ const onMouseUppedHandler = (
                 y: 0
             }));
 
-            // Apply the drag offset to the selection
-            next(nodesOffset({
-                nodeIDs: getSelectedNodeIDs(state),
-                offset: offset
-            }));
-            next(waypointsOffset({
-                waypointIDs: getSelectedWaypointIDs(state),
-                offset: offset
-            }));
+            // Apply the drag offset to the selection if it's nonzero
+            if (offset.x !== 0 || offset.y !== 0) {
+                next(nodesOffset({
+                    nodeIDs: getSelectedNodeIDs(state),
+                    offset: offset
+                }));
+                next(waypointsOffset({
+                    waypointIDs: getSelectedWaypointIDs(state),
+                    offset: offset
+                }));
+            }
 
         }
 

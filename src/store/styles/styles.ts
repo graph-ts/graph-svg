@@ -6,7 +6,10 @@ import { Dict, DynamicStyles } from '../../components/types';
 import { SelectionState } from '../selection/selection';
 import {
     getDefaultEdgeStyle,
-    getDefaultNodeStyle, getEdgeStyleDef, getEdgeStyleHoveredDef, getEdgeStyleSelectedDef,
+    getDefaultNodeStyle,
+    getEdgeStyleDef,
+    getEdgeStyleHoveredDef,
+    getEdgeStyleSelectedDef,
     getNodeStyleDef,
     getNodeStyleHoveredDef,
     getNodeStyleSelectedDef

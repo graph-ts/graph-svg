@@ -1,7 +1,7 @@
-import { Edge, newGraph } from '@graph-ts/graph-lib';
+import { Edge, newGraph, PositionedNode } from '@graph-ts/graph-lib';
 import { CSSProperties, FC, useState } from 'react';
 import { Dict, DynamicStyles, LabelDef, PathDef, ShapeDef } from '../src/components/types';
-import { HoverUpdateCallback, PositionedNode, SelectionUpdateCallback } from '../src/GraphGroupProps';
+import { HoverUpdateCallback, SelectionUpdateCallback } from '../src/GraphGroupProps';
 import GraphSVGDiv from '../src/GraphSVGDiv';
 import { Button, ButtonBar, ButtonBarContainer, Separator } from './ui/ButtonBar';
 import { randomEdgeLabels } from './utilities/labels';

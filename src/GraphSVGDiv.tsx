@@ -1,7 +1,7 @@
-import { Edge } from '@graph-ts/graph-lib';
+import { Edge, PositionedNode } from '@graph-ts/graph-lib';
 import { useMemo, useRef } from 'react';
 import GraphGroup from './GraphGroup';
-import { GraphGroupProps, PositionedNode } from './GraphGroupProps';
+import { GraphGroupProps } from './GraphGroupProps';
 import useDimensions from './hooks/useDimensions';
 import { typedMemo } from './utilities/typedMemo';
 

@@ -19,7 +19,6 @@ export type {
 } from './GraphSVGDiv';
 
 export type {
-    PositionedNode,
     GraphGroupProps,
     GraphUpdateCallback,
     HoverUpdateCallback,

@@ -1,8 +1,9 @@
 import { EnhancedStore, Unsubscribe } from '@reduxjs/toolkit';
+import { Edge, PositionedNode } from '@graph-ts/graph-lib';
 import { GraphGroupProps, GraphUpdateCallback } from '../GraphGroupProps';
 import { getGraph, RootState } from '../store/store';
 
-function graphSubscription (store: EnhancedStore<RootState>, props: GraphGroupProps, unsubscribe?: Unsubscribe): Unsubscribe {
+function graphSubscription <N extends PositionedNode, E extends Edge> (store: EnhancedStore<RootState>, props: GraphGroupProps<N, E>, unsubscribe?: Unsubscribe): Unsubscribe {
 
     if (unsubscribe) unsubscribe();
 

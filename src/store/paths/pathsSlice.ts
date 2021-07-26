@@ -1,11 +1,7 @@
-import { add, Vector2 } from '@graph-ts/vector2';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Dict, PathDef } from '../../components/types';
-import { parseWaypointID } from '../../components/waypoint/waypointUtils';
+import { Vector2 } from '@graph-ts/vector2';
+import { createSlice } from '@reduxjs/toolkit';
 import { createPathsState, PathsState } from './paths';
-import { getWaypoints } from './pathsSelectors';
-import { defaultTo } from 'lodash-es';
-import { EDGE_PATH } from '../../components/defaults';
+import { reducers } from './pathsReducers';
 
 export type WaypointPositionUpdate = {
     waypointIDs: string[]
@@ -17,30 +13,7 @@ const initialState: PathsState = createPathsState();
 const pathsSlice = createSlice({
     name: 'paths',
     initialState,
-    reducers: {
-        defaultPathChanged (state, action: PayloadAction<PathDef | undefined>) {
-            state.defaultPath = defaultTo(action.payload, EDGE_PATH);
-        },
-        pathsChanged (state, action: PayloadAction<Dict<PathDef>>) {
-            state.byID = action.payload;
-        },
-        waypointsOffset (state, action: PayloadAction<WaypointPositionUpdate>) {
-
-            const { waypointIDs, offset } = action.payload;
-
-            waypointIDs.forEach(waypointID => {
-                const [edgeID, index] = parseWaypointID(waypointID);
-                const waypoints = getWaypoints(state, edgeID);
-                if (waypoints) {
-                    const waypoint: Vector2 = waypoints[index];
-                    if (waypoint) {
-                        waypoints[index] = add(waypoint, offset);
-                    }
-                }
-            })
-
-        }
-    }
+    reducers
 });
 
 export const {

@@ -1,11 +1,11 @@
-import { Node } from '@graph-ts/graph-lib';
+import { PositionedNode } from '@graph-ts/graph-lib';
 import { Vector2 } from '@graph-ts/vector2';
 import createCachedSelector from 're-reselect';
 import { Matrix, applyToPoint } from 'transformation-matrix';
 import { getEdgeTarget, getSpreadMatrix } from '../store/store';
 import { keySelectorEdgeID } from './keySelectors';
 
-const combiner = (target: Node<Vector2>, spread: Matrix): Vector2 =>
+const combiner = <N extends PositionedNode> (target: N, spread: Matrix): Vector2 =>
     applyToPoint(spread, target);
 
 /**

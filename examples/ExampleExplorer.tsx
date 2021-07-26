@@ -4,17 +4,21 @@ import { Example1 } from './Example1';
 import { Example2 } from './Example2';
 import { Example3 } from './Example3';
 import { Example4 } from './Example4';
+import { Example5 } from './Example5';
+import { Example6 } from './Example6';
 
 const ExampleExplorer: FC = props => {
 
-    const [example, setExample] = useState<number>(4);
+    const [example, setExample] = useState<number>(6);
 
     const examples: [number, ComponentType][] = [
         [0, Example0],
         [1, Example1],
         [2, Example2],
         [3, Example3],
-        [4, Example4]
+        [4, Example4],
+        [5, Example5],
+        [6, Example6]
     ];
 
     const Example = examples[example][1];

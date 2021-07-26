@@ -1,21 +1,16 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { castDraft } from 'immer';
-import { Dict, EdgeLabelDef, LabelDef } from '../../components/types';
+import { createSlice } from '@reduxjs/toolkit';
 import { createLabelsState, LabelsState } from './labels';
+import { reducers } from './labelsReducers';
 
 const initialState: LabelsState = createLabelsState();
 
 const labelsSlice = createSlice({
     name: 'labels',
     initialState,
-    reducers: {
-        edgeLabelsChanged (state, action: PayloadAction<Dict<EdgeLabelDef[]>>) {
-            state.edgeLabels = castDraft(action.payload);
-        },
-        nodeLabelsChanged (state, action: PayloadAction<Dict<LabelDef[]>>) {
-            state.nodeLabels = castDraft(action.payload);
-        }
-    }
+
+    // TODO: Figure out why TS doesn't like this.
+    // @ts-ignore
+    reducers
 });
 
 export const {

@@ -1,11 +1,10 @@
-import { Graph, newGraph } from '@graph-ts/graph-lib';
-import { Vector2 } from '@graph-ts/vector2';
+import { Edge, Graph, newGraph, PositionedNode } from '@graph-ts/graph-lib';
 import { defaultTo, keys } from 'lodash-es';
 import { identity, Matrix } from 'transformation-matrix';
 
-export type GraphState = {
+export type GraphState<N extends PositionedNode, E extends Edge> = {
 
-    graph: Graph<Vector2>
+    graph: Graph<N, E>
 
     nodeIDs: string[]
     edgeIDs: string[]
@@ -13,9 +12,9 @@ export type GraphState = {
     spreadMatrix: Matrix
 }
 
-export const createGraphState = (graph?: Graph<Vector2>, selectedNodeIDs?: string[], selectedEdgeIDs?: string[]): GraphState => {
+export const createGraphState = <N extends PositionedNode, E extends Edge> (graph?: Graph<N, E>): GraphState<N, E> => {
 
-    const g = defaultTo(graph, newGraph());
+    const g = defaultTo(graph, newGraph<N, E>());
 
     return {
         graph: g,

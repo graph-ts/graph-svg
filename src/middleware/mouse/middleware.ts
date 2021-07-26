@@ -1,5 +1,6 @@
 import { createAction, Middleware } from '@reduxjs/toolkit';
 import { Matrix, toString } from 'transformation-matrix';
+import { Edge, PositionedNode } from '../../../../graph-lib';
 import { EdgeMouseEvent, NodeMouseEvent, WaypointMouseEvent } from '../../components/types';
 import { GraphGroupProps } from '../../GraphGroupProps';
 import { RootState } from '../../store/store';
@@ -42,7 +43,7 @@ export interface ZoomTransformSetter {
     (matrix: Matrix): void
 }
 
-export const mouseMiddleware = (props: GraphGroupProps, gesture: Gesture): MouseMiddleware => {
+export const mouseMiddleware = <N extends PositionedNode, E extends Edge> (props: GraphGroupProps<N, E>, gesture: Gesture): MouseMiddleware => {
 
     // Create a function that throttles the dispatching of drag events
     const dragDispatch = makeDragDispatcher();

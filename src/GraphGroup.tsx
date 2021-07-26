@@ -1,4 +1,4 @@
-import { Edge } from '@graph-ts/graph-lib';
+import { Edge, PositionedNode } from '@graph-ts/graph-lib';
 import { configureStore, EnhancedStore, getDefaultMiddleware, Unsubscribe } from '@reduxjs/toolkit';
 import { Component } from 'react';
 import { Provider } from 'react-redux';
@@ -6,7 +6,7 @@ import { ZOOM_FACTOR } from './components/defaults';
 import { Defs } from './components/defs/Defs';
 import EdgesGroup from './components/groups/EdgesGroup';
 import NodesGroup from './components/groups/NodesGroup';
-import { GraphGroupProps, PositionedNode } from './GraphGroupProps';
+import { GraphGroupProps } from './GraphGroupProps';
 import { Gesture } from './middleware/mouse/gesture';
 import {
     mouseDowned,
